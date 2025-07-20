@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <div class="card">
+        {% if news.image %}
+            <img src="{{ news.image.url }}" alt="{{ news.title }}" class="img-fluid" style="width:100%; height:400px; object-fit: contain;">
+        {% endif %}
+        <div class="card-body">
+            <h3 class="card-title">{{ news.title }}</h3>
+            <p class="card-text">{{ news.content|truncatechars:150 }}</p>
+            <p class="text-muted">Date: {{ news.created_at|date:"d M Y" }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="text-center mb-5">
+    <h1 class="fw-bold">स्वागत है तीखी वार्ता में</h1>
+    <p class="lead">जहाँ आपकी आवाज़ बनती है खबर</p>
+</div>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    <div class="col">
+        <div class="card h-100 shadow">
+            <img src="https://source.unsplash.com/600x400/?india,news" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">भारत की नयी दिशा</h5>
+                <p class="card-text">देश में हो रहे बदलाव और विकास की झलक यहाँ पढ़ें।</p>
+                <a href="#" class="btn btn-primary">पूरा पढ़ें</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="card h-100 shadow">
+            <img src="https://source.unsplash.com/600x400/?politics,india" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">राजनीति की हलचल</h5>
+                <p class="card-text">आज की राजनीतिक गतिविधियों पर एक नज़र।</p>
+                <a href="#" class="btn btn-primary">पूरा पढ़ें</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="card h-100 shadow">
+            <img src="https://source.unsplash.com/600x400/?education,students" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">शिक्षा में बदलाव</h5>
+                <p class="card-text">नई शिक्षा नीति और छात्रों की चुनौतियाँ।</p>
+                <a href="#" class="btn btn-primary">पूरा पढ़ें</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

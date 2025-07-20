@@ -1,0 +1,13 @@
+<!-- add_news.html -->
+
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>नई खबर जोड़ें</h2>
+    <form method="POST" enctype="multipart/form-data">  <!-- enctype जोड़ना जरूरी -->
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">सेव करें</button>
+    </form>
+</div>
+{% endblock %}

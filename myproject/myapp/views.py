@@ -1,0 +1,115 @@
+from django.shortcuts import render
+
+def home(request):
+    return render(request, 'home.html')
+
+
+
+from django.shortcuts import render, redirect
+
+def search_results(request):
+    if request.method == 'POST':
+        query = request.POST.get('query')
+        if query:
+            # बाद में आप यहां पर real search logic लगा सकते हैं
+            return render(request, 'search_results.html', {'query': query})
+        else:
+            return redirect('home')  # खाली query पे home भेज दो
+    else:
+        return redirect('home')  # कोई direct GET मारे तो भी home पर भेज दो
+    
+
+
+
+# views.py
+from django.shortcuts import render, redirect
+from .models import News
+
+CATEGORY_LABELS = {
+    'adhikar': 'आपका अधिकार',
+    'bharat': 'भारत',
+    'janata': 'जनता की आवाज़',
+    'local': 'लोकल खबरें',
+    'international': 'अंतर्राष्ट्रीय',
+    'opinion': 'ओपिनियन',
+    'politics': 'राजनीती',
+    'education': 'शिक्षा',
+    'society': 'समाज',
+    'cyber': 'साइबर सुरक्षा',
+}
+
+def category_news(request, category_slug):
+    news_list = News.objects.filter(category=category_slug)
+    category_name = CATEGORY_LABELS.get(category_slug, "Unknown")
+    return render(request, 'category_news.html', {'news_list': news_list, 'category': category_name})
+
+
+
+
+
+
+
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from .forms import NewsForm
+
+def admin_login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None and user.is_staff:
+            login(request, user)
+            return redirect('admin_dashboard')
+        else:
+            return render(request, 'admin_login.html', {'error': 'Invalid credentials or not authorized'})
+    return render(request, 'admin_login.html')
+
+
+@login_required(login_url='/login/')
+def admin_dashboard(request):
+    return render(request, 'admin_dashboard.html')
+
+
+
+
+def admin_logout(request):
+    logout(request)
+    return redirect('admin_login')
+
+
+
+from django.shortcuts import get_object_or_404
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import News
+from .forms import NewsForm  # अगर आप form यूज़ कर रहे हो
+
+
+# views.py
+
+from django.shortcuts import render, redirect
+from .forms import NewsForm
+
+def add_news(request):
+    if request.method == 'POST':
+        form = NewsForm(request.POST, request.FILES)  # ध्यान: request.FILES ज़रूरी है
+        if form.is_valid():
+            form.save()
+            return redirect('news_list')  # या अपनी news list url का नाम
+    else:
+        form = NewsForm()
+    return render(request, 'add_news.html', {'form': form})
+
+
+def news_list(request):
+    news_list = News.objects.all().order_by('-created_at')
+    return render(request, 'news_list.html', {'news_list': news_list})
+
+
+def news_detail(request, pk):
+    news = get_object_or_404(News, pk=pk)
+    category_slug = news.category_slug if news.category_slug else ''  # ya default koi slug
+    return render(request, 'news_detail.html', {'news': news, 'category_slug': category_slug})
