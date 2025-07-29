@@ -28,6 +28,7 @@ urlpatterns = [
     # Frontend URLs
     path('', views.home, name='home'),
     path('search/', views.search_results, name='search_results'),
+
     path('category/<str:category_slug>/', views.category_news, name='category_news'),
 
     # Custom Admin Panel URLs

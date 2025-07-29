@@ -1,9 +1,68 @@
 <!-- templates/search_results.html -->
 {% extends "base.html" %}
-
+{% load static %}
 {% block content %}
 <div class="container mt-4">
-    <h2>खोज परिणाम: "{{ query }}"</h2>
-    <p>यहाँ पर भविष्य में सर्च से जुड़े परिणाम दिखाए जा सकते हैं।</p>
+    {% comment %} <h2>खोज परिणाम: "{{ query }}"</h2> {% endcomment %}
+
+    {% if results %}
+        <div class="row">
+            {% for news in results %}
+            <div class="card mb-4 shadow-sm border-0">
+                <div class="row g-0">
+                    <!-- Content Left -->
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h4 class="card-title fw-semibold">{{ news.title }}</h4>
+                            <p class="text-muted small mb-1">
+                                <i class="bi bi-calendar-date"></i>
+                                {{ news.created_at|date:"d M Y" }}
+                            </p>
+                            <p class="card-text">
+                                {{ news.content|truncatechars:200 }}
+                            </p>
+                            <a href="{% url 'news_detail' news.id %}" class="btn btn-outline-primary btn-sm mt-2">
+                                और पढ़ें
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Image Right -->
+                    <div class="col-md-4 d-flex align-items-center justify-content-center">
+                        {% if news.image %}
+                        <img src="{{ news.image.url }}" alt="{{ news.title }}"
+                             class="img-fluid rounded"
+                             style="max-height: 180px; object-fit: cover; cursor: pointer;"
+                             data-bs-toggle="modal" data-bs-target="#imageModal{{ news.id }}">
+                        {% else %}
+                        <img src="{% static 'images/default-news.jpg' %}" alt="Default Image"
+                             class="img-fluid rounded"
+                             style="max-height: 180px; object-fit: cover;">
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- ✅ Image Modal with Close Button -->
+            {% if news.image %}
+            <div class="modal fade" id="imageModal{{ news.id }}" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content position-relative bg-white border-0 rounded shadow">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="newsModalLabel{{ news.id }}">{{ news.title }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body p-0">
+                            <img src="{{ news.image.url }}" class="img-fluid w-100 rounded-bottom" alt="{{ news.title }}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>कोई परिणाम नहीं मिला।</p>
+    {% endif %}
 </div>
 {% endblock %}

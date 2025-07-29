@@ -3,6 +3,7 @@ from django.db import models
 
 class News(models.Model):
     CATEGORY_CHOICES = [
+        ('home', 'सभी समाचार'),
         ('adhikar', 'आपका अधिकार'),
         ('bharat', 'भारत'),
         ('janata', 'जनता की आवाज़'),
@@ -23,6 +24,7 @@ class News(models.Model):
 
     image = models.ImageField(upload_to='news_images/', blank=True, null=True)
     video = models.FileField(upload_to='news_videos/', blank=True, null=True)
+    
 
 
     def __str__(self):

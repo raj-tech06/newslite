@@ -7,16 +7,45 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-        <div class="container-fluid">
-            <a class="navbar-brand fw-bold" href="#">तीखी वार्ता</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            
-            <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+<h2 class="text-center fw-bold mt-2 d-lg-none">LiteNews</h2>
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top" style="background-color: #0a2647;">
+    <div class="container-fluid">
+
+        <!-- Desktop Brand -->
+        <a class="navbar-brand fw-bold d-none d-lg-block" href="#">LiteNews</a>
+
+        <!-- Toggler -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Collapsible Content -->
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+
+            <!-- Mobile Brand (only visible below lg) -->
+            <a class="navbar-brand fw-bold d-lg-none mb-2" href="#">LiteNews</a>
+
+            <!-- ✅ Search Form FIRST in collapse -->
+            <form class="d-flex mb-3 d-lg-none w-100" method="POST" action="{% url 'search_results' %}">
+                {% csrf_token %}
+                <div class="input-group">
+                    <input type="search" name="query" class="form-control" placeholder="खोजें..." value="{{ query|default_if_none:'' }}" aria-label="Search">
+                    <button class="btn btn-outline-secondary" type="submit">🔍</button>
+                </div>
+            </form>
+
+            <!-- ✅ Desktop Search (visible on lg+) -->
+            <form class="d-none d-lg-flex ms-auto me-3" method="POST" action="{% url 'search_results' %}">
+                {% csrf_token %}
+                <div class="input-group">
+                    <input type="search" name="query" class="form-control" placeholder="खोजें..." value="{{ query|default_if_none:'' }}" aria-label="Search">
+                    <button class="btn btn-outline-secondary" type="submit">🔍</button>
+                </div>
+            </form>
+
+            <!-- Navigation Items -->
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">सभी समाचार</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'category_news' 'adhikar' %}">आपका अधिकार</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'category_news' 'bharat' %}">भारत</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'category_news' 'janata' %}">जनता की आवाज़</a></li>
@@ -27,15 +56,27 @@
                 <li class="nav-item"><a class="nav-link" href="{% url 'category_news' 'education' %}">शिक्षा</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'category_news' 'society' %}">समाज</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'category_news' 'cyber' %}">साइबर सुरक्षा</a></li>
-                </ul>
-                    <form class="d-flex" method="POST" action="{% url 'search_results' %}">
-                        {% csrf_token %}
-                        <input class="form-control me-2" type="search" name="query" placeholder="खोजें..." aria-label="Search">
-                        <button class="btn btn-outline-light" type="submit">खोजें</button>
-                    </form>
-            </div>
+            </ul>
+
         </div>
-    </nav>
+    </div>
+</nav>
+{% comment %} <div class="bg-body text-dark py-2 overflow-hidden"> {% endcomment %}
+<div style="background-color: #b3a840ff;" class="text-dark py-2 overflow-hidden">
+
+  <div class="d-inline-block" style="white-space: nowrap; animation: scroll-left 15s linear infinite;">
+     <a href="https://yourlink.com" class="text-dark text-decoration-none mx-3">https://youtube.com/@lite_news_?si=D5tFKPL40VCKqSal </a>
+    {% comment %} 🔴 <a href="https://anotherlink.com" class="text-dark text-decoration-none mx-3">दूसरा लिंक यहाँ डालें</a> {% endcomment %}
+  </div>
+</div>
+
+<style>
+@keyframes scroll-left {
+  0%   { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+</style>
+
 
     <!-- Page Content -->
     <div class="container mt-4">

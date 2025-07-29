@@ -1,23 +1,28 @@
 from django.shortcuts import render
 
 def home(request):
-    return render(request, 'home.html')
+    all_news = News.objects.all().order_by('-created_at')
+    return render(request, 'home.html', {'all_news': all_news})
 
 
 
 from django.shortcuts import render, redirect
+from .models import News
+
+
+from django.shortcuts import render, redirect
+from .models import News  # यदि News model से सर्च हो रही है
 
 def search_results(request):
     if request.method == 'POST':
         query = request.POST.get('query')
         if query:
-            # बाद में आप यहां पर real search logic लगा सकते हैं
-            return render(request, 'search_results.html', {'query': query})
+            results = News.objects.filter(title__icontains=query)
+            return render(request, 'search_results.html', {'query': query, 'results': results})
         else:
-            return redirect('home')  # खाली query पे home भेज दो
+            return redirect('home')
     else:
-        return redirect('home')  # कोई direct GET मारे तो भी home पर भेज दो
-    
+        return redirect('home')  # यहाँ GET से आने पर redirect किया जा रहा है
 
 
 
@@ -26,6 +31,7 @@ from django.shortcuts import render, redirect
 from .models import News
 
 CATEGORY_LABELS = {
+    'home': 'सभी समाचार',
     'adhikar': 'आपका अधिकार',
     'bharat': 'भारत',
     'janata': 'जनता की आवाज़',
@@ -39,12 +45,9 @@ CATEGORY_LABELS = {
 }
 
 def category_news(request, category_slug):
-    news_list = News.objects.filter(category=category_slug)
+    news_list = News.objects.filter(category=category_slug).order_by('-created_at')
     category_name = CATEGORY_LABELS.get(category_slug, "Unknown")
     return render(request, 'category_news.html', {'news_list': news_list, 'category': category_name})
-
-
-
 
 
 

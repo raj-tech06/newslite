@@ -1,43 +1,52 @@
-{% extends "base.html" %}
-
+{% extends 'base.html' %}
 {% block content %}
-<div class="text-center mb-5">
-    <h1 class="fw-bold">स्वागत है तीखी वार्ता में</h1>
-    <p class="lead">जहाँ आपकी आवाज़ बनती है खबर</p>
-</div>
 
-<div class="row row-cols-1 row-cols-md-3 g-4">
-    <div class="col">
-        <div class="card h-100 shadow">
-            <img src="https://source.unsplash.com/600x400/?india,news" class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">भारत की नयी दिशा</h5>
-                <p class="card-text">देश में हो रहे बदलाव और विकास की झलक यहाँ पढ़ें।</p>
-                <a href="#" class="btn btn-primary">पूरा पढ़ें</a>
+<div class="container mt-4">
+    <h2 class="text-center fw-bold border-bottom pb-3">📰 ताज़ा खबरें</h2>
+
+    {% for news in all_news %}
+    <div class="card mb-4 shadow-sm border-0">
+        <div class="row g-0 align-items-center">
+            {% if news.image %}
+            <div class="col-md-3">
+                <img src="{{ news.image.url }}" 
+                     class="img-fluid rounded-start" 
+                     alt="{{ news.title }}" 
+                     style="height: 160px; width: 100%; object-fit: contain; cursor: pointer;"
+                     data-bs-toggle="modal"
+                     data-bs-target="#newsModal{{ news.id }}">
+            </div>
+            {% endif %}
+            <div class="col-md-9">
+                <div class="card-body px-3">
+                    <h5 class="card-title fw-semibold">{{ news.title|truncatechars:80 }}</h5>
+                    <p class="card-text text-muted mb-2" style="font-size: 14px;">{{ news.content|truncatechars:150 }}</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a href="{% url 'news_detail' news.id %}" class="btn btn-sm btn-outline-primary">पूरा पढ़ें</a>
+                        <span class="badge bg-secondary">{{ news.get_category_display }}</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="col">
-        <div class="card h-100 shadow">
-            <img src="https://source.unsplash.com/600x400/?politics,india" class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">राजनीति की हलचल</h5>
-                <p class="card-text">आज की राजनीतिक गतिविधियों पर एक नज़र।</p>
-                <a href="#" class="btn btn-primary">पूरा पढ़ें</a>
+    <!-- ✅ Modal for this News item -->
+    <div class="modal fade" id="newsModal{{ news.id }}" tabindex="-1" aria-labelledby="newsModalLabel{{ news.id }}" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="newsModalLabel{{ news.id }}">{{ news.title }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {% if news.image %}
+                    <img src="{{ news.image.url }}" class="img-fluid mb-3" alt="{{ news.title }}">
+                    {% endif %}
+                    {% comment %} <p style="font-size: 16px;">{{ news.content }}</p> {% endcomment %}
+                </div>
             </div>
         </div>
     </div>
-
-    <div class="col">
-        <div class="card h-100 shadow">
-            <img src="https://source.unsplash.com/600x400/?education,students" class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">शिक्षा में बदलाव</h5>
-                <p class="card-text">नई शिक्षा नीति और छात्रों की चुनौतियाँ।</p>
-                <a href="#" class="btn btn-primary">पूरा पढ़ें</a>
-            </div>
-        </div>
-    </div>
+    {% endfor %}
 </div>
 {% endblock %}
