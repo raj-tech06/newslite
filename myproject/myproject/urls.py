@@ -27,6 +27,8 @@ urlpatterns = [
 
     # Frontend URLs
     path('', views.home, name='home'),
+    path('news_list/', views.news_list, name='news_list'),
+
     path('search/', views.search_results, name='search_results'),
 
     path('category/<str:category_slug>/', views.category_news, name='category_news'),
@@ -38,7 +40,6 @@ urlpatterns = [
     path('myadmin/add-news/', views.add_news, name='add_news'),
     path('news-list/', views.news_list, name='news_list'),  # news list view का path
     path('category/<slug:category_slug>/', views.category_news, name='category_news'),
-
 
     path('news/<int:pk>/', views.news_detail, name='news_detail'),
     path('add/', views.add_news, name='add_news'),  # आपकी खबर जोड़ें वाली view

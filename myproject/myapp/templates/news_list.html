@@ -1,20 +1,35 @@
 {% extends "base.html" %}
+{% load static %}
 {% block content %}
-<div class="container mt-4">
-    <h2>लेटेस्ट न्यूज़</h2>
-    <div class="row">
-        {% for i in news_items %}
-        <div class="col-md-4">
-            <div class="card mb-4">
-                <img src="{{ i.image.url }}" class="card-img-top" style="height:200px; object-fit:cover;">
-                <div class="card-body">
-                    <h5 class="card-title">{{ i.title }}</h5>
-                    <p class="card-text">{{ i.description|truncatewords:20 }}</p>
-                    <a href="{% url 'news_detail' i.id %}" class="btn btn-primary">पूरा पढ़े</a>
+<div class="container mt-5">
+    <h2 class="mb-4 text-center fw-bold display-6 border-bottom pb-2">Latest News</h2>
+
+    {% if news_list %}
+        {% for news in news_list %}
+            <div class="card mb-4 shadow-sm border-0">
+                <div class="row g-0">
+                    <!-- Left Image -->
+                    {% if news.image %}
+                        <img src="{{ news.image.url }}" alt="News Image" class="img-fluid rounded-start"
+                             style="max-height: 180px; object-fit: contain;">
+                    {% else %}
+                        <img src="{% static 'default.jpg' %}" alt="Default Image" class="img-fluid rounded-start"
+                             style="max-height: 180px; object-fit: contain;">  <!-- Optional fallback -->
+                    {% endif %}
+
+                    <!-- Right Content -->
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ news.title }}</h5>
+                            <p class="card-text">{{ news.description|truncatewords:30 }}</p>
+                            <p class="card-text"><small class="text-muted">Published on: {{ news.published_date }}</small></p>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
         {% endfor %}
-    </div>
+    {% else %}
+        <p class="text-center">No news found.</p>
+    {% endif %}
 </div>
 {% endblock %}

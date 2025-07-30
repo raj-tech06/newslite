@@ -1,8 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from .models import News
 
 def home(request):
     all_news = News.objects.all().order_by('-created_at')
-    return render(request, 'home.html', {'all_news': all_news})
+    news_items = all_news[:5]  # पहले 5 न्यूज़
+    return render(request, 'home.html', {'all_news': all_news, 'news_items': news_items})
 
 
 
@@ -107,12 +109,16 @@ def add_news(request):
     return render(request, 'add_news.html', {'form': form})
 
 
-def news_list(request):
-    news_list = News.objects.all().order_by('-created_at')
-    return render(request, 'news_list.html', {'news_list': news_list})
-
 
 def news_detail(request, pk):
     news = get_object_or_404(News, pk=pk)
     category_slug = news.category_slug if news.category_slug else ''  # ya default koi slug
     return render(request, 'news_detail.html', {'news': news, 'category_slug': category_slug})
+
+
+from django.shortcuts import render
+from .models import News
+
+def news_list(request):
+    news_items = News.objects.all().order_by('-id')  # latest first
+    return render(request, 'news_list.html', {'news_list': news_items})
